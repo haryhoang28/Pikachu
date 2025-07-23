@@ -241,11 +241,16 @@ public class Match2 : MonoBehaviour
         {
             if (!_boardAnalyzer.HasPossibleMatches())
             {
+                if (_gridManager.GetActivePokemonCount()==0)
+                {
+                    _gameManagerAdapter.ChangeGameState(GameState.Finish);
+                }
                 Debug.Log("[Match2] No possible matches left. Initiating shuffle!");
                 _gameManagerAdapter.ChangeGameState(GameState.Shuffling);
                 yield return StartCoroutine(_boardShuffler.ShuffleBoardRoutine(transform)); // Wait for shuffle to complete
                 _gameManagerAdapter.ChangeGameState(GameState.GamePlay);
                 Debug.Log("[Match2] Shuffle complete. GamePlay state resumed.");
+                _inputController.EnableInput();
 
                 // SAU KHI XÁO TRỘN, kiểm tra lại. Nếu vẫn không có nước đi, GAME OVER
                 if (!_boardAnalyzer.HasPossibleMatches())

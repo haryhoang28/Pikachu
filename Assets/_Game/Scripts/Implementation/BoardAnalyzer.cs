@@ -46,6 +46,7 @@ public class BoardAnalyzer : IBoardAnalyzer
 
     public bool HasPossibleMatches()
     {
+        if (_gridManager.GetActivePokemonCount() == 0) return false;
         List<Vector2Int> pokemonPositions = new List<Vector2Int>();
 
         for (int x = 1; x < _gridManager.GridWidth - 1; x++)
