@@ -49,7 +49,7 @@ public class Match2 : MonoBehaviour
 
         // Initialize components
         // Pass FIXED_MAP_LAYOUT to GridManager for initial setup and obstacle check
-        _gridManager = new GridManager(_cellSize, _origin, _innerGridWidth, _innerGridHeight, null);
+        _gridManager = new GridManager(_cellSize, _origin, _innerGridWidth, _innerGridHeight);
         _pokemonSpawner = new PokemonSpawner();
         _pokemonSpawner.SetPrefabs(_pokemonPrefab, _obstaclePrefab);
         _gameManagerAdapter = new GameManagerAdapter();
@@ -89,8 +89,9 @@ public class Match2 : MonoBehaviour
         _pokemonSpawner.Initialize(_pokemonTypes);
 
         MapCellType[,] randomMapLayout = GenerateRandomMapLayout(_innerGridWidth, _innerGridHeight, _pokemonTypes);
-        _gridManager.InitializeGrid(randomMapLayout, _pokemonSpawner.PokemonTypeMap, _obstaclePrefab, _pokemonPrefab, transform, _pokemonSpawner);
         
+        _gridManager.InitializeGrid(randomMapLayout, _pokemonSpawner.PokemonTypeMap, _obstaclePrefab, _pokemonPrefab, transform, _pokemonSpawner);
+
         if (!_boardAnalyzer.CheckEvenPokemonTypeCount())
         {
             Debug.LogWarning("[Match2] Generated map does not have even counts for all Pokemon types. Reshuffling or regenerating recommended.");
@@ -100,6 +101,7 @@ public class Match2 : MonoBehaviour
         _inputController.EnableInput();
 
         _currentTime = _gameDuration; // Khởi tạo bộ đếm thời gian
+        
     }
     private void Update()
     {

@@ -24,7 +24,7 @@ public class GridManager : IGridManager
 
     public Vector3 Origin => _origin;
 
-    public GridManager(float cellSize, Vector3 origin, int innerWidth, int innerHeight, MapCellType[,] initialMapLayout)
+    public GridManager(float cellSize, Vector3 origin, int innerWidth, int innerHeight)
     {
         _cellSize = cellSize;
         _origin = origin;
@@ -32,7 +32,7 @@ public class GridManager : IGridManager
         InnerGridHeight = innerHeight;
         GridWidth = InnerGridWidth + 2;
         GridHeight = InnerGridHeight + 2;
-        _currentMapLayout = initialMapLayout; // Có thể là null ban đầu, sẽ được set khi InitializeGrid
+        _currentMapLayout = new MapCellType[GridWidth, GridHeight]; // Có thể là null ban đầu, sẽ được set khi InitializeGrid
         _pokemonArray = new Pokemon[GridWidth, GridHeight];
     }
     public void ClearAllPokemonsAndObstacles(Transform parentTransform)
@@ -121,17 +121,17 @@ public class GridManager : IGridManager
     {
         // Xóa tất cả các đối tượng Pokemon hiện có trên sân khấu để tránh trùng lặp
         ClearExistingPokemonObjects(parentTransform); // Truyền parentTransform nếu cần Destroy con
-
         // Điền dữ liệu cho toàn bộ mảng _pokemonArray, bao gồm cả các ô biên
         for (int x = 0; x < GridWidth; x++)
         {
             for (int y = 0; y < GridHeight; y++)
             {
+                
                 // Khởi tạo các ô biên (x=0, x=GridWidth-1, y=0, y=GridHeight-1)
                 if (x == 0 || x == GridWidth - 1 || y == 0 || y == GridHeight - 1)
                 {
                     _pokemonArray[x, y] = null; // Các ô biên không chứa Pokemon
-                    _currentMapLayout[x, y] = MapCellType.Block; // Hoặc Empty, tùy theo định nghĩa biên của bạn
+                    _currentMapLayout[x, y] = MapCellType.Empty;
                     // TODO: Tạo các đối tượng Block cho biên nếu cần hiển thị
                 }
                 else

@@ -85,7 +85,6 @@ public class InputController : IInputController
                     return;
                 }
 
-                // Thực hiện tìm đường đi và kiểm tra khớp nối
                 Vector2Int pos1 = _firstSelectedPosition; // Sử dụng vị trí đã lưu
                 Vector2Int pos2 = clickedGridPos;
 
@@ -108,29 +107,22 @@ public class InputController : IInputController
                 }
             }
         }
-        else // Click vào một khoảng trống hoặc đối tượng không phải Pokemon
+        else
         {
             Debug.Log($"[InputController] Clicked on an empty space or non-Pokemon object. Deselecting any previously selected Pokemon.");
-            ResetSelection(); // <-- ĐÃ SỬA: Luôn dùng ResetSelection để bỏ chọn hình ảnh
+            ResetSelection();
         }
     }
 
-    // Phương thức này có vẻ dành cho việc kiểm tra xem tọa độ có nằm trong ranh giới lưới không.
-    // Trong ngữ cảnh của HandleClick, pos đã là vị trí lưới của một Pokemon,
-    // nên việc kiểm tra này có thể không cần thiết ở đây nếu _gridManager.GetPokemonGridPosition
-    // luôn trả về một vị trí hợp lệ cho một GameObject Pokemon.
-    private bool IsValidClickedPosition(Vector2Int pos)
-    {
-        return pos.x >= 0 && pos.x < _gridManager.GridWidth && pos.y >= 0 && pos.y < _gridManager.GridHeight;
-    }
+    
 
     private void ResetSelection()
     {
         if (_firstSelectedPokemon != null)
         {
-            _firstSelectedPokemon.Deselect(); // <-- ĐÃ THÊM: Gọi phương thức Deselect() để tắt hiệu ứng
+            _firstSelectedPokemon.Deselect(); 
             _firstSelectedPokemon = null;
-            _firstSelectedPosition = Vector2Int.zero; // Đặt lại vị trí đã lưu
+            _firstSelectedPosition = Vector2Int.zero;
             Debug.Log("[InputController] Selection reset.");
         }
     }
