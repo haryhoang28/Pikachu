@@ -239,6 +239,11 @@ public class Match2 : MonoBehaviour
         yield return new WaitForSeconds(delay);
         if (_gameManagerAdapter.IsGameState(GameState.GamePlay))
         {
+            if (_gridManager.GetActivePokemonCount() == 0)
+            { 
+                EndGame(false);
+            }
+
             if (!_boardAnalyzer.HasPossibleMatches())
             {
                 Debug.Log("[Match2] No possible matches left. Initiating shuffle!");

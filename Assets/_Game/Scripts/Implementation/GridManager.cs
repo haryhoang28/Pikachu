@@ -23,6 +23,7 @@ public class GridManager : IGridManager
     public float CellSize => _cellSize;
 
     public Vector3 Origin => _origin;
+    public int GetActivePokemonCount() => _activePokemonCount;
 
     public GridManager(float cellSize, Vector3 origin, int innerWidth, int innerHeight)
     {
@@ -32,9 +33,11 @@ public class GridManager : IGridManager
         InnerGridHeight = innerHeight;
         GridWidth = InnerGridWidth + 2;
         GridHeight = InnerGridHeight + 2;
-        _currentMapLayout = new MapCellType[GridWidth, GridHeight]; // Có thể là null ban đầu, sẽ được set khi InitializeGrid
+        _currentMapLayout = new MapCellType[GridWidth, GridHeight]; 
         _pokemonArray = new Pokemon[GridWidth, GridHeight];
+        _activePokemonCount = 0;
     }
+
     public void ClearAllPokemonsAndObstacles(Transform parentTransform)
     {
         if (_pokemonArray == null) return;
@@ -66,6 +69,7 @@ public class GridManager : IGridManager
         {
             UnityEngine.Object.Destroy(obj);
         }
+        _activePokemonCount = 0;
     }
 
     public void ClearPokemonAt(Vector2Int gridPosition)
@@ -75,7 +79,13 @@ public class GridManager : IGridManager
             Debug.LogError($"[GridManager] Attempted to clear Pokemon at invalid grid position: {gridPosition}");
             return;
         }
-        _pokemonArray[gridPosition.x, gridPosition.y] = null;
+        if (_pokemonArray[gridPosition.x, gridPosition.y] != null)
+        {
+            _pokemonArray[gridPosition.x, gridPosition.y] = null;
+            _activePokemonCount--; // Giảm số lượng Pokemon đang hoạt động
+            Debug.LogError(_activePokemonCount);
+            Debug.Log($"[GridManager] Pokemon cleared at {gridPosition}. Active Pokemon count: {_activePokemonCount}");
+        }
     }
 
     public Pokemon GetPokemonAt(Vector2Int gridPosition)
@@ -298,8 +308,5 @@ public class GridManager : IGridManager
         return new Vector2Int(x, y);
     }
 
-    public int GetActivePokemonCount()
-    {
-        return _activePokemonCount;
-    }
+    
 }

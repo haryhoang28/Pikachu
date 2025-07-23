@@ -87,11 +87,6 @@ public class BoardShuffler : IBoardShuffler
             {
                 if (typeIndex < existingPokemonTypes.Count)
                 {
-                    // Create a dummy Pokemon object if not actually instantiating for performance,
-                    // or directly set type in _gridManager for analysis.
-                    // For simplicity, we'll use CreatePokemonAt, but it will instantiate.
-                    // If you want a "simulated" shuffle, you'd just update _gridManager's internal array
-                    // without actual GameObject creation until a solvable board is found.
                     _pokemonSpawner.CreatePokemonAt(pos.x, pos.y, existingPokemonTypes[typeIndex], parentTransform, _gridManager);
                     typeIndex++;
                 }
