@@ -83,7 +83,6 @@ public class GridManager : IGridManager
         {
             _pokemonArray[gridPosition.x, gridPosition.y] = null;
             _activePokemonCount--; // Giảm số lượng Pokemon đang hoạt động
-            Debug.LogError(_activePokemonCount);
             Debug.Log($"[GridManager] Pokemon cleared at {gridPosition}. Active Pokemon count: {_activePokemonCount}");
         }
     }
@@ -124,7 +123,7 @@ public class GridManager : IGridManager
 
     public Vector3 GetWorldPositionCenter(int x, int y)
     {
-        return new Vector3(x * _cellSize + _cellSize * 0.5f, y * _cellSize + _cellSize * 0.5f, 0) + _origin;
+        return new Vector3(x * _cellSize, y * _cellSize, 0) + _origin;
     }
 
     public void InitializeGrid(MapCellType[,] fixedMapLayout, Dictionary<MapCellType, PokemonType> pokemonTypeMap, GameObject obstaclePrefab, Pokemon pokemonPrefab, Transform parentTransform, IPokemonSpawner pokemonSpawner)

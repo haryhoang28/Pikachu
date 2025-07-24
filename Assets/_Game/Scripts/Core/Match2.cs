@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 
@@ -21,6 +22,9 @@ public class Match2 : MonoBehaviour
     [SerializeField] private float _pokemonDespawnDuration = 0.5f;
     [SerializeField] private int _innerGridWidth = 8;
     [SerializeField] private int _innerGridHeight = 8;
+
+    [Header("UI Settings")]
+    [SerializeField] private Image _timebarFillImage;
     
     [Header("Game End Settings")]
     [SerializeField] private float _gameDuration = 120f; // Tổng thời gian chơi (ví dụ: 120 giây)
@@ -213,27 +217,7 @@ public class Match2 : MonoBehaviour
         StartCoroutine(CheckForShuffleAfterDelay(_pokemonDespawnDuration + 0.1f));
     }
 
-    private IEnumerator HandleMatchCompletion(Vector2Int pos1, Vector2Int pos2)
-    {
-        yield return new WaitForSeconds(_pokemonDespawnDuration);
-
-        // KIỂM TRA ĐIỀU KIỆN HOÀN THÀNH LEVEL: Nếu tất cả Pokemon đã được xóa
-        if (_gridManager.GetActivePokemonCount() == 0)
-        {
-            EndGame(true); // Level Complete!
-            yield break; // Thoát coroutine
-        }
-
-        // Sau khi xử lý khớp, kiểm tra xem còn nước đi nào không
-        // (Nếu game vẫn chưa kết thúc)
-        if (_gameManagerAdapter.IsGameState(GameState.GamePlay)) // Kiểm tra lại trạng thái
-        {
-            StartCoroutine(CheckForShuffleAfterDelay(0.1f)); // Đảm bảo độ trễ nhỏ sau khi xử lý khớp
-        }
-
-        _gameManagerAdapter.ChangeGameState(GameState.GamePlay); // Kích hoạt lại input
-    }
-
+    
     private IEnumerator CheckForShuffleAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -261,7 +245,6 @@ public class Match2 : MonoBehaviour
                 if (!_boardAnalyzer.HasPossibleMatches())
                 {
                     Debug.LogWarning("[Match2] No possible matches left AFTER SHUFFLE. Game Over!");
-                    EndGame(false); // Game Over do không còn nước đi
                 }
             }
         }
