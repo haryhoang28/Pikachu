@@ -23,8 +23,6 @@ public class GridManager : IGridManager
     public float CellSize => _cellSize;
 
     public Vector3 Origin => _origin;
-    public int GetActivePokemonCount() => _activePokemonCount;
-
     public GridManager(float cellSize, Vector3 origin, int innerWidth, int innerHeight)
     {
         _cellSize = cellSize;
@@ -33,10 +31,71 @@ public class GridManager : IGridManager
         InnerGridHeight = innerHeight;
         GridWidth = InnerGridWidth + 2;
         GridHeight = InnerGridHeight + 2;
-        _currentMapLayout = new MapCellType[GridWidth, GridHeight]; 
+        _currentMapLayout = new MapCellType[GridWidth, GridHeight];
         _pokemonArray = new Pokemon[GridWidth, GridHeight];
         _activePokemonCount = 0;
     }
+
+    public void InitializeGrid(MapCellType[,] mapLayout, Dictionary<MapCellType, PokemonType> pokemonTypeMap, GameObject obstaclePrefab, Pokemon pokemonPrefab, Transform parentTransform, IPokemonSpawner pokemonSpawner)
+    {
+        // Xóa tất cả các đối tượng Pokemon hiện có trên sân khấu để tránh trùng lặp
+        ClearExistingPokemonObjects(parentTransform); // Truyền parentTransform nếu cần Destroy con
+        // Điền dữ liệu cho toàn bộ mảng _pokemonArray, bao gồm cả các ô biên
+        for (int x = 0; x < GridWidth; x++)
+        {
+            for (int y = 0; y < GridHeight; y++)
+            {
+
+                // Khởi tạo các ô biên (x=0, x=GridWidth-1, y=0, y=GridHeight-1)
+                if (x == 0 || x == GridWidth - 1 || y == 0 || y == GridHeight - 1)
+                {
+                    _pokemonArray[x, y] = null; // Các ô biên không chứa Pokemon
+                    _currentMapLayout[x, y] = MapCellType.Empty;
+                    // TODO: Tạo các đối tượng Block cho biên nếu cần hiển thị
+                }
+                else
+                {
+                    // Ánh xạ tọa độ từ fixedMapLayout (0-indexed) sang mảng nội bộ (1-indexed)
+                    MapCellType cellType = mapLayout[x - 1, y - 1];
+                    _currentMapLayout[x, y] = cellType; // Lưu layout cho các lần kiểm tra sau
+
+                    if ((int)cellType >= 1 && (int)cellType <= 10) // Đây là loại Pokemon (giá trị enum 1-10)
+                    {
+                        if (pokemonTypeMap.TryGetValue(cellType, out PokemonType pokemonType))
+                        {
+                            // Tạo đối tượng Pokemon và lưu tham chiếu của nó
+                            Pokemon newPokemon = pokemonSpawner.CreatePokemonAt(x, y, pokemonType, parentTransform, this);
+                            _pokemonArray[x, y] = newPokemon; // Đặt Pokemon vào mảng
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"[GridManager] No PokemonType found for MapCellType: {cellType} at ({x},{y}). Setting to null.");
+                            _pokemonArray[x, y] = null;
+                        }
+                    }
+                    else if (cellType == MapCellType.Block)
+                    {
+                        // Xử lý việc tạo chướng ngại vật (nếu bạn có prefab chướng ngại vật)
+                        if (obstaclePrefab != null)
+                        {
+                            // Ví dụ: GameObject obstacle = GameObject.Instantiate(obstaclePrefab, GetWorldPositionCenter(x, y), Quaternion.identity, parentTransform);
+                        }
+                        _pokemonArray[x, y] = null;
+                    }
+                    else
+                    {
+                        _pokemonArray[x, y] = null;
+                    }
+                }
+            }
+        }
+
+        // *** Sau khi InitializeGrid hoàn tất việc điền _pokemonArray, chúng ta sẽ tính lại số lượng***
+        RecalculateActivePokemonCount();
+        Debug.Log($"[GridManager] Grid initialized. Total active Pokemon (recalculated): {_activePokemonCount}");
+    }
+
+    public int GetActivePokemonCount() => _activePokemonCount;
 
     public void ClearAllPokemonsAndObstacles(Transform parentTransform)
     {
@@ -83,7 +142,6 @@ public class GridManager : IGridManager
         {
             _pokemonArray[gridPosition.x, gridPosition.y] = null;
             _activePokemonCount--; // Giảm số lượng Pokemon đang hoạt động
-            Debug.LogError(_activePokemonCount);
             Debug.Log($"[GridManager] Pokemon cleared at {gridPosition}. Active Pokemon count: {_activePokemonCount}");
         }
     }
@@ -124,67 +182,10 @@ public class GridManager : IGridManager
 
     public Vector3 GetWorldPositionCenter(int x, int y)
     {
-        return new Vector3(x * _cellSize + _cellSize * 0.5f, y * _cellSize + _cellSize * 0.5f, 0) + _origin;
+        return new Vector3(x * _cellSize, y * _cellSize, 0) + _origin;
     }
 
-    public void InitializeGrid(MapCellType[,] fixedMapLayout, Dictionary<MapCellType, PokemonType> pokemonTypeMap, GameObject obstaclePrefab, Pokemon pokemonPrefab, Transform parentTransform, IPokemonSpawner pokemonSpawner)
-    {
-        // Xóa tất cả các đối tượng Pokemon hiện có trên sân khấu để tránh trùng lặp
-        ClearExistingPokemonObjects(parentTransform); // Truyền parentTransform nếu cần Destroy con
-        // Điền dữ liệu cho toàn bộ mảng _pokemonArray, bao gồm cả các ô biên
-        for (int x = 0; x < GridWidth; x++)
-        {
-            for (int y = 0; y < GridHeight; y++)
-            {
-                
-                // Khởi tạo các ô biên (x=0, x=GridWidth-1, y=0, y=GridHeight-1)
-                if (x == 0 || x == GridWidth - 1 || y == 0 || y == GridHeight - 1)
-                {
-                    _pokemonArray[x, y] = null; // Các ô biên không chứa Pokemon
-                    _currentMapLayout[x, y] = MapCellType.Empty;
-                    // TODO: Tạo các đối tượng Block cho biên nếu cần hiển thị
-                }
-                else
-                {
-                    // Ánh xạ tọa độ từ fixedMapLayout (0-indexed) sang mảng nội bộ (1-indexed)
-                    MapCellType cellType = fixedMapLayout[x - 1, y - 1];
-                    _currentMapLayout[x, y] = cellType; // Lưu layout cho các lần kiểm tra sau
-
-                    if ((int)cellType >= 1 && (int)cellType <= 10) // Đây là loại Pokemon (giá trị enum 1-10)
-                    {
-                        if (pokemonTypeMap.TryGetValue(cellType, out PokemonType pokemonType))
-                        {
-                            // Tạo đối tượng Pokemon và lưu tham chiếu của nó
-                            Pokemon newPokemon = pokemonSpawner.CreatePokemonAt(x, y, pokemonType, parentTransform, this);
-                            _pokemonArray[x, y] = newPokemon; // Đặt Pokemon vào mảng
-                        }
-                        else
-                        {
-                            Debug.LogWarning($"[GridManager] No PokemonType found for MapCellType: {cellType} at ({x},{y}). Setting to null.");
-                            _pokemonArray[x, y] = null;
-                        }
-                    }
-                    else if (cellType == MapCellType.Block)
-                    {
-                        // Xử lý việc tạo chướng ngại vật (nếu bạn có prefab chướng ngại vật)
-                        if (obstaclePrefab != null)
-                        {
-                            // Ví dụ: GameObject obstacle = GameObject.Instantiate(obstaclePrefab, GetWorldPositionCenter(x, y), Quaternion.identity, parentTransform);
-                        }
-                        _pokemonArray[x, y] = null; 
-                    }
-                    else 
-                    {
-                        _pokemonArray[x, y] = null;
-                    }
-                }
-            }
-        }
-
-        // *** Sau khi InitializeGrid hoàn tất việc điền _pokemonArray, chúng ta sẽ tính lại số lượng***
-        RecalculateActivePokemonCount();
-        Debug.Log($"[GridManager] Grid initialized. Total active Pokemon (recalculated): {_activePokemonCount}");
-    }
+    
 
     private void RecalculateActivePokemonCount()
     {

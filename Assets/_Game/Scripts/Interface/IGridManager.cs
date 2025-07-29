@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine; 
 
 public interface IGridManager
@@ -12,7 +12,7 @@ public interface IGridManager
 
     Pokemon GetPokemonAt(Vector2Int gridPosition);
     void SetPokemonAt(Vector2Int gridPosition, Pokemon pokemon);
-    void ClearPokemonAt(Vector2Int gridPosition); // Ph??ng th?c ?? xóa Pokemon
+    void ClearPokemonAt(Vector2Int gridPosition); 
 
     Vector3 GetWorldPositionCenter(int x, int y);
     Vector2Int WorldToGrid(Vector3 worldPosition);

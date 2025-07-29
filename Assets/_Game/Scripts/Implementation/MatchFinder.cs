@@ -28,40 +28,33 @@ public class MatchFinder : IMatchFinder
 
         if (pokemon1 == null || pokemon2 == null)
         {
-            // Debug.LogWarning($"[MatchFinder] One or both selected positions ({tile1}, {tile2}) do not contain a Pokemon.");
             return false;
         }
         if (pokemon1.Type != pokemon2.Type)
         {
-            // Debug.Log($"[MatchFinder] Pokemons are not of the same type: {pokemon1.Type.typeName} vs {pokemon2.Type.typeName}.");
             return false;
         }
         if (tile1 == tile2)
         {
-            // Debug.Log($"[MatchFinder] Selected the same tile: {tile1}.");
             return false;
         }
 
-        // Debug.Log($"[MatchFinder] Attempting to find path from {tile1} to {tile2} (Type: {pokemon1.Type.typeName})");
         bool matchFound = false;
 
         if (CheckLine(tile1, tile2, out foundPath))
         {
             bends = 0;
             matchFound = true;
-            // Debug.Log($"[MatchFinder] Found 0-bend path. Path length: {foundPath.Count}");
         }
         else if (CheckOneBend(tile1, tile2, out foundPath))
         {
             bends = 1;
             matchFound = true;
-            // Debug.Log($"[MatchFinder] Found 1-bend path. Path length: {foundPath.Count}");
         }
         else if (CheckTwoBend(tile1, tile2, out foundPath))
         {
             bends = 2;
             matchFound = true;
-            // Debug.Log($"[MatchFinder] Found 2-bend path. Path length: {foundPath.Count}");
         }
 
         return matchFound;
@@ -70,7 +63,6 @@ public class MatchFinder : IMatchFinder
     private bool CheckLine(Vector2Int pos1, Vector2Int pos2, out List<Vector2Int> path)
     {
         path = new List<Vector2Int>();
-        // Debug.Log($"[MatchFinder - CheckLine] Checking line from {pos1} to {pos2}");
 
         if (pos1.y == pos2.y) // Horizontal line
         {

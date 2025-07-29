@@ -44,6 +44,45 @@ public class BoardAnalyzer : IBoardAnalyzer
         return true;
     }
 
+    public (Vector2Int, Vector2Int)? FindHintMatch()
+    {
+        List<Vector2Int> pokemonPosition = new List<Vector2Int>();
+        for (int x = 1; x < _gridManager.GridWidth; x++) 
+        {
+            for (int y = 1; y < _gridManager.GridHeight; y++) 
+            {
+                Vector2Int currentPosition = new Vector2Int(x, y);
+                if (_gridManager.GetPokemonAt(currentPosition) != null)
+                {
+                    pokemonPosition.Add(currentPosition);
+                }
+            }
+        }
+
+        for (int i = 0; i < pokemonPosition.Count; i++)
+        {
+            for (int j = i + 1; j < pokemonPosition.Count; j++)
+            {
+                Vector2Int pos1 = pokemonPosition[i];
+                Vector2Int pos2 = pokemonPosition[j];
+
+                Pokemon pokemon1 = _gridManager.GetPokemonAt(pos1);
+                Pokemon pokemon2 = _gridManager.GetPokemonAt(pos2);
+
+                if (pokemon1 != null && pokemon2 != null && pokemon1.Type == pokemon2.Type)
+                {
+                    if (_matchFinder.TryFindMatch(pos1, pos2, out _, out _))
+                    {
+                        Debug.Log($"[BoardAnalyzer] Found a hint match between {pos1} and {pos2}.");
+                        return (pos1, pos2);
+                    }
+                }
+            }
+        }
+        Debug.Log("[BoardAnalyzer] No hint match found.");
+        return null; 
+    }
+
     public bool HasPossibleMatches()
     {
         if (_gridManager.GetActivePokemonCount() == 0) return false;

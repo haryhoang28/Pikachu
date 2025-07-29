@@ -6,21 +6,19 @@ public class InputController : IInputController
 {
     private IGridManager _gridManager;
     private IMatchFinder _matchFinder;
-    private IGameManagerAdapter _gameManagerAdapter;
 
     private Pokemon _firstSelectedPokemon;
-    private Vector2Int _firstSelectedPosition; // <-- ĐÃ THÊM: Khai báo biến này
+    private Vector2Int _firstSelectedPosition; 
 
     public event Action<List<Vector2Int>, Color, float> OnPathFoundForDebug;
     public event Action<Pokemon, Pokemon> OnPokemonMatched;
     public event Action OnNoMatchFound;
     private bool _inputEnabled = true;
 
-    public InputController(IGridManager gridManager, IMatchFinder matchFinder, IGameManagerAdapter gameManagerAdapter)
+    public InputController(IGridManager gridManager, IMatchFinder matchFinder)
     {
         _gridManager = gridManager;
         _matchFinder = matchFinder;
-        _gameManagerAdapter = gameManagerAdapter;
     }
 
     public void EnableInput()
@@ -46,7 +44,7 @@ public class InputController : IInputController
         }
 
         // Chỉ xử lý input nếu trò chơi đang ở trạng thái GamePlay
-        if (!_gameManagerAdapter.IsGameState(GameState.GamePlay))
+        if (!GameManager.Instance.IsState(GameState.GamePlay))
         {
             return;
         }
@@ -63,7 +61,7 @@ public class InputController : IInputController
                 // Đây là Pokemon đầu tiên được chọn
                 _firstSelectedPokemon = clickedPokemon;
                 _firstSelectedPosition = clickedGridPos; // Lưu vị trí của Pokemon đầu tiên
-                _firstSelectedPokemon.Select(); // <-- ĐÃ THÊM: Gọi phương thức Select() để hiển thị hiệu ứng
+                _firstSelectedPokemon.Select(); // 
                 Debug.Log($"[InputController] First Pokemon selected: {clickedPokemon.Type.typeName} at {_firstSelectedPosition}");
             }
             else // Một Pokemon đã được chọn trước đó
@@ -72,7 +70,7 @@ public class InputController : IInputController
                 if (clickedPokemon == _firstSelectedPokemon)
                 {
                     Debug.Log("[InputController] Same Pokemon clicked again. Deselecting.");
-                    ResetSelection(); // <-- ĐÃ SỬA: Dùng ResetSelection để bỏ chọn hình ảnh
+                    ResetSelection(); 
                     return;
                 }
 
@@ -81,7 +79,7 @@ public class InputController : IInputController
                 {
                     Debug.Log($"[InputController] Pokemon types do not match: {_firstSelectedPokemon.Type.typeName} vs {clickedPokemon.Type.typeName}.");
                     OnNoMatchFound?.Invoke(); // Kích hoạt sự kiện không tìm thấy match
-                    ResetSelection(); // <-- ĐÃ SỬA: Dùng ResetSelection để bỏ chọn hình ảnh
+                    ResetSelection(); 
                     return;
                 }
 
@@ -97,13 +95,13 @@ public class InputController : IInputController
                     OnPathFoundForDebug?.Invoke(path, Color.green, 0.5f); // Kích hoạt sự kiện debug đường đi
                     OnPokemonMatched?.Invoke(_firstSelectedPokemon, clickedPokemon); // Kích hoạt sự kiện khớp nối thành công
                     // Sau khi match thành công, luôn reset lựa chọn
-                    ResetSelection(); // <-- ĐÃ SỬA: Dùng ResetSelection để bỏ chọn hình ảnh
+                    ResetSelection(); 
                 }
                 else
                 {
                     Debug.Log($"[InputController] No valid path found between {pos1} and {pos2}.");
                     OnNoMatchFound?.Invoke(); // Kích hoạt sự kiện không tìm thấy match
-                    ResetSelection(); // <-- ĐÃ SỬA: Dùng ResetSelection để bỏ chọn hình ảnh
+                    ResetSelection(); 
                 }
             }
         }

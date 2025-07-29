@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -60,5 +61,10 @@ public class Pokemon : MonoBehaviour
             _iconSprite.color = _originalColor; // Đặt lại màu gốc
         }
         Debug.Log($"[Pokemon] {Type.typeName} at {transform.position} deselected.");
+    }
+
+    internal void Highlight(float hintHighlightDuration, Color hintColor)
+    {
+        throw new NotImplementedException();
     }
 }

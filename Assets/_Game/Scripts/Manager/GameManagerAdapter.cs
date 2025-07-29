@@ -20,7 +20,7 @@ public class GameManagerAdapter : IGameManagerAdapter
             Debug.LogWarning("[GameManagerAdapter] GameManager.Instance is null. Assuming not in GamePlay state.");
             return false;
         }
-        return GameManager.Instance.isState(gameState);
+        return GameManager.Instance.IsState(gameState);
     }
     
 }
