@@ -52,7 +52,9 @@ public class Pokemon : MonoBehaviour
     {
         if (_backgroundSprite != null)
         {
-            _backgroundSprite.color = Color.green; 
+            Color selecColor;
+            if (ColorUtility.TryParseHtmlString("#4EFF4E", out selecColor)) ;
+            _backgroundSprite.color = selecColor; 
         }
         Debug.Log($"[Pokemon] {Type.typeName} at {transform.position} selected.");
     }

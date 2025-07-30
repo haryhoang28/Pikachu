@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9af7ac0-5002-4560-8ded-0440ec1e08a7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Prefabs/Cell.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Prefabs/Cell.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Resources/UI/Canvas - GamePlay.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Resources/UI/Canvas - GamePlay.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Scripts/Core/Match2.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Scripts/Core/Match2.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Scripts/Implementation/GridManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Scripts/Implementation/GridManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Scripts/Implementation/InputController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Scripts/Implementation/InputController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Scripts/Manager/GameManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Scripts/Manager/GameManager.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Scripts/Pokemon/Pokemon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Scripts/Pokemon/Pokemon.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/_Game/Scripts/UI/CanvasGamePlay.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/_Game/Scripts/UI/CanvasGamePlay.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Pikachu/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Pikachu/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +18,7 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/Assets/_Game/Scripts/Implementation/PokemonSpawner.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -38,6 +32,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "hint-button-feature",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -110,12 +105,14 @@
       <workItem from="1753757762454" duration="2714000" />
       <workItem from="1753760674819" duration="2593000" />
       <workItem from="1753777632401" duration="7353000" />
+      <workItem from="1753840116362" duration="799000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="true" />
   <component name="UnityProjectDiscoverer">
     <option name="hasUnityReference" value="true" />
