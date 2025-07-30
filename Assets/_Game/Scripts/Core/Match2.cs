@@ -11,8 +11,8 @@ using Random = UnityEngine.Random;
 public class Match2 : MonoBehaviour
 {
     [Header("Grid Settings")]
-    [SerializeField] private float _cellSize = 1f;
-    [SerializeField] private Vector3 _origin = Vector3.zero;
+    private readonly float _cellSize = 1f;
+    private readonly Vector3 _origin = Vector3.zero;
 
 
     [Header("Pokemon Settings")]
@@ -23,8 +23,8 @@ public class Match2 : MonoBehaviour
     [SerializeField] private int _innerGridWidth = 8;
     [SerializeField] private int _innerGridHeight = 8;
 
-    [Header("Hint Pokemon Settings")]
-    [SerializeField] private float _hintHighlightDuration = 1f;
+    [Header("Hint Pokemon Settings")] 
+    [SerializeField] private float _hintHighlightDuration = 0.5f;
     [SerializeField] private Color _hintColor = Color.green;
     private int _maxHintPerGame = 3;
     private int _hintRemaining;
@@ -39,6 +39,8 @@ public class Match2 : MonoBehaviour
 
     public static event Action<int, int, float, Vector3> OnGridSystemReady;
 
+    public int MaxHintPerGame => _maxHintPerGame;
+    public int CurrentHintCount => _hintRemaining;
 
     private void Awake()
     {
@@ -106,8 +108,6 @@ public class Match2 : MonoBehaviour
     {
         _inputController.DisableInput();
     }
-
-
     private MapCellType[,] GenerateRandomMapLayout(int innerGridWidth, int innerGridHeight, PokemonType[] availablePokemonTypes)
     {
         MapCellType[,] layout = new MapCellType[innerGridWidth, innerGridHeight];
@@ -177,9 +177,7 @@ public class Match2 : MonoBehaviour
         for (int i = 0; i < list.Count - 1; i++)
         {
             int randomIndex = Random.Range(i, list.Count);
-            T temp = list[randomIndex];
-            list[randomIndex] = list[i];
-            list[i] = temp;
+            (list[randomIndex], list[i]) = (list[i], list[randomIndex]);
         }
     }
 
@@ -262,6 +260,7 @@ public class Match2 : MonoBehaviour
             if (hint.HasValue)
             {
                 _hintRemaining--; 
+                OnHintCountChanged?.Invoke(_hintRemaining, _maxHintPerGame);
                 Debug.Log($"[Match2] Hint provided for positions: {hint.Value.pos1} and {hint.Value.pos2}. Hints remaining: {_hintRemaining}");
 
                 Pokemon p1 = _gridManager.GetPokemonAt(hint.Value.pos1);

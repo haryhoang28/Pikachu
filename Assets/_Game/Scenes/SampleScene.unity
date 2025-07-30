@@ -485,8 +485,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1650a0f28f6bb4e40a616c94e986d085, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cellSize: 1
-  _origin: {x: 0, y: 0, z: 0}
   _pokemonPrefab: {fileID: -2805888674363850910, guid: 2762334da5470c74fae96ffebeaebedb, type: 3}
   _pokemonTypes:
   - {fileID: 11400000, guid: 926aacbfa6b0a7f4cb86210e86d9f510, type: 2}
@@ -497,7 +495,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 49d856190ea42384d94fd0e42438a887, type: 2}
   - {fileID: 11400000, guid: ef9d5c3eace5b624a901bb61e934f344, type: 2}
   _obstaclePrefab: {fileID: 923230250698783524, guid: 1bf57ad980198b649bbc327779788c97, type: 3}
-  _pokemonDespawnDuration: 0.5
+  _pokemonDespawnDuration: 1
   _innerGridWidth: 3
   _innerGridHeight: 4
   _hintHighlightDuration: 1

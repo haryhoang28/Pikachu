@@ -184,9 +184,6 @@ public class GridManager : IGridManager
     {
         return new Vector3(x * _cellSize, y * _cellSize, 0) + _origin;
     }
-
-    
-
     private void RecalculateActivePokemonCount()
     {
         int count = 0;
@@ -308,6 +305,4 @@ public class GridManager : IGridManager
         int y = Mathf.FloorToInt(gridPosition.y);
         return new Vector2Int(x, y);
     }
-
-    
 }

@@ -5,10 +5,14 @@ using UnityEngine;
 
 public class Pokemon : MonoBehaviour
 {
+    [Header("Pokemon Settings")]
     [SerializeField] private PokemonType _type;
     [SerializeField] private SpriteRenderer _iconSprite;
-    // Biến để lưu trữ màu gốc của Sprite Renderer
+    [SerializeField] private SpriteRenderer _backgroundSprite;
+    
+    [Header("Hint Settings")]
     private Color _originalColor;
+    private Coroutine _highlightCoroutine;
     public PokemonType Type => _type;
     private void Awake()
     {
@@ -46,9 +50,9 @@ public class Pokemon : MonoBehaviour
     }
     public void Select()
     {
-        if (_iconSprite != null)
+        if (_backgroundSprite != null)
         {
-            _iconSprite.color = Color.yellow; 
+            _backgroundSprite.color = Color.green; 
         }
         Debug.Log($"[Pokemon] {Type.typeName} at {transform.position} selected.");
     }
@@ -56,15 +60,31 @@ public class Pokemon : MonoBehaviour
     
     public void Deselect()
     {
-        if (_iconSprite != null)
+        if (_backgroundSprite != null)
         {
-            _iconSprite.color = _originalColor; // Đặt lại màu gốc
+            _backgroundSprite.color = _originalColor; // Đặt lại màu gốc
         }
         Debug.Log($"[Pokemon] {Type.typeName} at {transform.position} deselected.");
     }
 
-    internal void Highlight(float hintHighlightDuration, Color hintColor)
+    public void Highlight(float hintHighlightDuration, Color hintColor)
     {
-        throw new NotImplementedException();
+        if (_highlightCoroutine != null)
+        {
+            StopCoroutine(_highlightCoroutine);
+        }
+        _highlightCoroutine =StartCoroutine(HighLightRoutine(hintHighlightDuration, hintColor));
+    }
+
+    private IEnumerator HighLightRoutine(float hintHighlightDuration, Color hintColor)
+    {
+        if (_backgroundSprite != null)
+        {
+            Color prevColor = _backgroundSprite.color;
+            _backgroundSprite.color = hintColor; // Đặt màu nền thành màu gợi ý
+            yield return new WaitForSeconds(hintHighlightDuration);
+            _backgroundSprite.color = prevColor; // Đặt lại màu nền về màu gốc
+        }
+        _highlightCoroutine = null; // Đặt lại coroutine để có thể bắt đầu một lần nữa nếu cần
     }
 }

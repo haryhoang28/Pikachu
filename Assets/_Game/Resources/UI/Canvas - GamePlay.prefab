@@ -431,16 +431,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3366279069630485125}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5384616, y: 1.5384616, z: 1.5384616}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8459715520210925712}
+  m_Father: {fileID: 2503904929382842449}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 432, y: -707}
+  m_AnchoredPosition: {x: 81.53839, y: 106.15393}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8264717929703863682
@@ -552,6 +552,7 @@ GameObject:
   - component: {fileID: 8592815818876499366}
   - component: {fileID: 3990151224401242007}
   - component: {fileID: 5995268341544400783}
+  - component: {fileID: 8201189837781930928}
   m_Layer: 5
   m_Name: Button - Hint
   m_TagString: Untagged
@@ -570,7 +571,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.65, y: 0.65, z: 0.65}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1710475902811852179}
   m_Father: {fileID: 8459715520210925712}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -660,8 +662,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Match2, Assembly-CSharp
+      - m_Target: {fileID: -6715547097215327381}
+        m_TargetAssemblyTypeName: CanvasGamePlay, Assembly-CSharp
         m_MethodName: OnHintButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -672,6 +674,20 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8201189837781930928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4490756216794756626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d2dc562a893454ea09cb28257534fa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _hintCountText: {fileID: 4730773721736893392}
+  _button: {fileID: 5995268341544400783}
 --- !u!1 &5017942598675974605
 GameObject:
   m_ObjectHideFlags: 0
@@ -1151,7 +1167,6 @@ RectTransform:
   - {fileID: 2551379700162814700}
   - {fileID: 6385278006909506481}
   - {fileID: 2171776581071025312}
-  - {fileID: 1710475902811852179}
   m_Father: {fileID: 3950152220204480536}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

@@ -8,7 +8,7 @@ public class HintButtonUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _hintCountText;
     [SerializeField] private Button _button;
-    [SerializeField] private Match2 _match2;
+    // [SerializeField] private Match2 _match2;
     private void Awake()
     {
         if (_hintCountText == null)
@@ -41,18 +41,6 @@ public class HintButtonUI : MonoBehaviour
         if (_button != null)
         {
             _button.interactable = (currentCount > 0);
-        }
-    }
-
-    private void OnBUttonClicked()
-    {
-        if (_match2 != null)
-        {
-            _match2.OnHintButtonClicked();
-        }
-        else
-        {
-            Debug.LogWarning("[HintButtonUI] Match2 reference is null. Cannot request hint.");
         }
     }
 }

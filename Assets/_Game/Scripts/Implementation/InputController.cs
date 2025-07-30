@@ -43,7 +43,7 @@ public class InputController : IInputController
             return;
         }
 
-        // Chỉ xử lý input nếu trò chơi đang ở trạng thái GamePlay
+        // Only process clicks when the game is in gameplay state
         if (!GameManager.Instance.IsState(GameState.GamePlay))
         {
             return;
@@ -55,18 +55,18 @@ public class InputController : IInputController
         {
             Vector2Int clickedGridPos = _gridManager.GetPokemonGridPosition(clickedPokemon);
 
-            // Kiểm tra xem đây có phải là lần chọn đầu tiên hay thứ hai
+            // If this is the first Pokemon being selected
             if (_firstSelectedPokemon == null)
             {
-                // Đây là Pokemon đầu tiên được chọn
+                // Assign the clicked Pokemon as the first selected Pokemon
                 _firstSelectedPokemon = clickedPokemon;
-                _firstSelectedPosition = clickedGridPos; // Lưu vị trí của Pokemon đầu tiên
-                _firstSelectedPokemon.Select(); // 
+                _firstSelectedPosition = clickedGridPos; // Save the position of the first selected Pokemon
+                _firstSelectedPokemon.Select();
                 Debug.Log($"[InputController] First Pokemon selected: {clickedPokemon.Type.typeName} at {_firstSelectedPosition}");
             }
-            else // Một Pokemon đã được chọn trước đó
+            else // If a Pokemon is already selected
             {
-                // Nếu người chơi click lại vào cùng một Pokemon đã chọn
+                // If the clicked Pokemon is the same as the first selected one, deselect it
                 if (clickedPokemon == _firstSelectedPokemon)
                 {
                     Debug.Log("[InputController] Same Pokemon clicked again. Deselecting.");
@@ -74,7 +74,7 @@ public class InputController : IInputController
                     return;
                 }
 
-                // Nếu hai Pokemon có loại khác nhau, đây không phải là một cặp hợp lệ
+                // If the clicked Pokemon has a different type than the first selected one, reset selection
                 if (_firstSelectedPokemon.Type.typeId != clickedPokemon.Type.typeId)
                 {
                     Debug.Log($"[InputController] Pokemon types do not match: {_firstSelectedPokemon.Type.typeName} vs {clickedPokemon.Type.typeName}.");
@@ -82,8 +82,9 @@ public class InputController : IInputController
                     ResetSelection(); 
                     return;
                 }
-
-                Vector2Int pos1 = _firstSelectedPosition; // Sử dụng vị trí đã lưu
+                // The second Pokemon is different and matches the type of the first selected one. then try to find a match
+                
+                Vector2Int pos1 = _firstSelectedPosition; 
                 Vector2Int pos2 = clickedGridPos;
 
                 List<Vector2Int> path;
@@ -91,8 +92,11 @@ public class InputController : IInputController
 
                 if (checkMatch)
                 {
+                    // Match found, proceed with the match logic
+                    // Change color of the second Pokemon to indicate selection
+                    clickedPokemon.Select();
                     Debug.Log($"[InputController] Match found between {pos1} and {pos2}!");
-                    OnPathFoundForDebug?.Invoke(path, Color.green, 0.5f); // Kích hoạt sự kiện debug đường đi
+                    OnPathFoundForDebug?.Invoke(path, Color.green, 1f); // Kích hoạt sự kiện debug đường đi
                     OnPokemonMatched?.Invoke(_firstSelectedPokemon, clickedPokemon); // Kích hoạt sự kiện khớp nối thành công
                     // Sau khi match thành công, luôn reset lựa chọn
                     ResetSelection(); 

@@ -10,7 +10,6 @@ public class CanvasGamePlay : UICanvas
     [SerializeField] private TextMeshProUGUI _scoreText;
     [SerializeField] private TextMeshProUGUI _hintCountText;
     [SerializeField] private Button _hintButton;
-
     [Header("Time Bar UI Settings")]
     [SerializeField] private TimeBar _timeBar;
 
@@ -26,8 +25,6 @@ public class CanvasGamePlay : UICanvas
 
     public void UpdateHintCount(int currentCount, int maxCount)
     {
-        
-
         // Vô hiệu hóa hoặc kích hoạt lại nút gợi ý
         if (_hintButton != null)
         {
@@ -68,6 +65,7 @@ public class CanvasGamePlay : UICanvas
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnClicked();
+            UpdateHintCount(GameManager.Instance.GetCurrentHintCount, GameManager.Instance.GetMaxHintCount);
         }
         else
         {

@@ -13,6 +13,7 @@ public class CanvasFail : UICanvas
     }
     public void MainMenuButton()
     {
+        GameManager.Instance.ClearGame();
         UIManager.Instance.CloseAll();
         UIManager.Instance.OpenUI<CanvasMainMenu>();
 

@@ -22,6 +22,11 @@ public class GameManager : Singleton<GameManager>
 
     private UIManager _uiManager;
 
+    public int GetCurrentHintCount => _match2 != null ? _match2.CurrentHintCount : 0;
+    public int GetMaxHintCount => _match2 != null ? _match2.MaxHintPerGame : 0;
+    
+    public void ClearGame() => _match2.ClearGame();
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
