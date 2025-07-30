@@ -13,7 +13,12 @@ public class Pokemon : MonoBehaviour
     [Header("Hint Settings")]
     private Color _originalColor;
     private Coroutine _highlightCoroutine;
-    public PokemonType Type => _type;
+    public PokemonType Type
+    {
+        get => _type;
+        set => _type = value;
+    }
+
     private void Awake()
     {
         if (_iconSprite == null)
@@ -52,7 +57,9 @@ public class Pokemon : MonoBehaviour
     {
         if (_backgroundSprite != null)
         {
-            _backgroundSprite.color = Color.green; 
+            Color selecColor;
+            if (ColorUtility.TryParseHtmlString("#4EFF4E", out selecColor)) ;
+            _backgroundSprite.color = selecColor; 
         }
         Debug.Log($"[Pokemon] {Type.typeName} at {transform.position} selected.");
     }
@@ -73,7 +80,7 @@ public class Pokemon : MonoBehaviour
         {
             StopCoroutine(_highlightCoroutine);
         }
-        _highlightCoroutine =StartCoroutine(HighLightRoutine(hintHighlightDuration, hintColor));
+        _highlightCoroutine = StartCoroutine(HighLightRoutine(hintHighlightDuration, hintColor));
     }
 
     private IEnumerator HighLightRoutine(float hintHighlightDuration, Color hintColor)
@@ -87,4 +94,6 @@ public class Pokemon : MonoBehaviour
         }
         _highlightCoroutine = null; // Đặt lại coroutine để có thể bắt đầu một lần nữa nếu cần
     }
+
+    
 }

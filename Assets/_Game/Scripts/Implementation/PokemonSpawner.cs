@@ -63,4 +63,19 @@ public class PokemonSpawner : IPokemonSpawner
         _pokemonPrefab = pokemonPrefab;
         _obstaclePrefab = obstaclePrefab;
     }
+    
+    public void SetPokemonSprite(Pokemon activePokemon, PokemonType type)
+    {
+        if (activePokemon == null)
+        {
+            Debug.LogError("[PokemonSpawner] Active Pokemon is null.");
+            return;
+        }
+        if (type == null)
+        {
+            Debug.LogError("[PokemonSpawner] PokemonType is null.");
+            return;
+        }
+        activePokemon.OnInit(type);
+    }
 }

@@ -11,6 +11,7 @@ public interface IGridManager
     Vector3 Origin { get; }
 
     Pokemon GetPokemonAt(Vector2Int gridPosition);
+    List<Pokemon> GetAllActivePokemons();
     void SetPokemonAt(Vector2Int gridPosition, Pokemon pokemon);
     void ClearPokemonAt(Vector2Int gridPosition); 
 

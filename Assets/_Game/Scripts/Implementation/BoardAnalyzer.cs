@@ -83,6 +83,8 @@ public class BoardAnalyzer : IBoardAnalyzer
         return null; 
     }
 
+    
+
     public bool HasPossibleMatches()
     {
         if (_gridManager.GetActivePokemonCount() == 0) return false;

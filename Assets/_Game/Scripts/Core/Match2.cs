@@ -23,13 +23,19 @@ public class Match2 : MonoBehaviour
     [SerializeField] private int _innerGridWidth = 8;
     [SerializeField] private int _innerGridHeight = 8;
 
-    [Header("Hint Pokemon Settings")] 
+    [Header("Hint Booster Settings")] 
     [SerializeField] private float _hintHighlightDuration = 0.5f;
     [SerializeField] private Color _hintColor = Color.green;
     private int _maxHintPerGame = 3;
     private int _hintRemaining;
     public static event Action<int, int> OnHintCountChanged;
 
+    [Header("Shuffle Booster Settings")]
+    [SerializeField] private int _maxShufflePerGame = 3;
+    private int _shuffleRemaining;
+    public static event Action<int, int> OnShuffleCountChanged;
+    
+    
     private IGridManager _gridManager;
     private IMatchFinder _matchFinder;
     private IInputController _inputController;
@@ -41,6 +47,9 @@ public class Match2 : MonoBehaviour
 
     public int MaxHintPerGame => _maxHintPerGame;
     public int CurrentHintCount => _hintRemaining;
+    
+    public int MaxShufflePerGame => _maxShufflePerGame;
+    public int CurrentShuffleCount => _shuffleRemaining;
 
     private void Awake()
     {
@@ -92,22 +101,19 @@ public class Match2 : MonoBehaviour
         OnGridSystemReady?.Invoke(_gridManager.InnerGridWidth, _gridManager.InnerGridHeight, _gridManager.CellSize, _gridManager.Origin);
         _inputController.EnableInput();
         _hintRemaining = _maxHintPerGame;
+        _shuffleRemaining = _maxShufflePerGame;
         Debug.Log($"[Match2] Game initialized. Hints available: {_hintRemaining}");
 
         OnHintCountChanged?.Invoke(_hintRemaining, _maxHintPerGame);
-         
+        OnShuffleCountChanged?.Invoke(_shuffleRemaining, _maxShufflePerGame);
     }
     public void ClearGame()
     {
         DisableInput();
         _gridManager.ClearAllPokemonsAndObstacles(transform);
-        Debug.Log("[Match2] Game board cleared by GridManager.");
+    }
+    public void DisableInput() => _inputController.DisableInput();
 
-    }
-    public void DisableInput()
-    {
-        _inputController.DisableInput();
-    }
     private MapCellType[,] GenerateRandomMapLayout(int innerGridWidth, int innerGridHeight, PokemonType[] availablePokemonTypes)
     {
         MapCellType[,] layout = new MapCellType[innerGridWidth, innerGridHeight];
@@ -144,7 +150,7 @@ public class Match2 : MonoBehaviour
             pokemonsToPlace.Add(randomType);
             pokemonsToPlace.Add(randomType); // Thêm cặp
         }
-        ShuffleList(pokemonsToPlace);
+        _boardShuffler.ShuffleList(pokemonsToPlace);
         int pokemonIndex = 0;
         for (int x = 0; x < innerGridWidth; x++)
         {
@@ -172,13 +178,11 @@ public class Match2 : MonoBehaviour
         return layout;
     }
 
-    private void ShuffleList<T>(List<T> list)
+    public void ShuffleBoard()
     {
-        for (int i = 0; i < list.Count - 1; i++)
-        {
-            int randomIndex = Random.Range(i, list.Count);
-            (list[randomIndex], list[i]) = (list[i], list[randomIndex]);
-        }
+        Debug.Log("[Match2] ShuffleBoard called. Disabling input temporarily.");
+        _inputController.DisableInput();
+        StartCoroutine(_boardShuffler.ShuffleBoardRoutine(transform));
     }
 
     private void HandleNoMatchFound()
@@ -300,6 +304,22 @@ public class Match2 : MonoBehaviour
         }
     }
 
+    public void OnShuffleButtonClicked()
+    {
+        if (GameManager.Instance.IsState(GameState.GamePlay) && _shuffleRemaining > 0)
+        {
+            Debug.Log("[Match2] Shuffle button clicked!");
+            _shuffleRemaining--;
+            OnShuffleCountChanged?.Invoke(_shuffleRemaining, _maxShufflePerGame);
+            ShuffleBoard();
+            StartCoroutine(DisableInputTemporarily(0.1f));
+        }
+        else if (_shuffleRemaining <= 0)
+        {
+            Debug.Log("[Match2] No shuffles left for this game!");
+        }
+    }
+    
     private IEnumerator DisableInputTemporarily(float duration)
     {
         _inputController.DisableInput();
@@ -309,5 +329,4 @@ public class Match2 : MonoBehaviour
             _inputController.EnableInput();
         }
     }
-    
 }

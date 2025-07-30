@@ -257,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124fdeb4db8f30f4db24c5ac067b30ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameDuration: 30
+  _gameDuration: 120
   _scorePerMatch: 10
   _match2: {fileID: 1334837488}
 --- !u!4 &832061270
@@ -496,10 +496,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: ef9d5c3eace5b624a901bb61e934f344, type: 2}
   _obstaclePrefab: {fileID: 923230250698783524, guid: 1bf57ad980198b649bbc327779788c97, type: 3}
   _pokemonDespawnDuration: 1
-  _innerGridWidth: 3
-  _innerGridHeight: 4
+  _innerGridWidth: 8
+  _innerGridHeight: 8
   _hintHighlightDuration: 1
   _hintColor: {r: 0, g: 1, b: 0, a: 1}
+  _maxShufflePerGame: 3
 --- !u!1 &1347255345
 GameObject:
   m_ObjectHideFlags: 0

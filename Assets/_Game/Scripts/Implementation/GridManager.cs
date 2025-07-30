@@ -152,6 +152,25 @@ public class GridManager : IGridManager
         return _pokemonArray[gridPosition.x, gridPosition.y];
     }
 
+    public List<Pokemon> GetAllActivePokemons()
+    {
+        if (_pokemonArray == null) return new List<Pokemon>();
+
+        List<Pokemon> activePokemons = new List<Pokemon>();
+        for (int x = 1; x < GridWidth - 1; x++) // Bỏ qua các ô biên
+        {
+            for (int y = 1; y < GridHeight - 1; y++)
+            {
+                Pokemon pokemon = _pokemonArray[x, y];
+                if (pokemon != null && pokemon.gameObject.activeSelf) // Chỉ lấy Pokemon đang hoạt động
+                {
+                    activePokemons.Add(pokemon);
+                }
+            }
+        }
+        return activePokemons;
+    }
+
     public void SetPokemonAt(Vector2Int gridPosition, Pokemon pokemon)
     {
         if (!IsValidGridPosition(gridPosition))

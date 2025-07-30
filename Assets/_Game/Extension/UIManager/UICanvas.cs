@@ -16,7 +16,7 @@ public class UICanvas : MonoBehaviour
             Vector2 rightTop = rect.offsetMax;
 
             leftBottom.y = 0f;
-            rightTop.y = -100f;
+            rightTop.y = -150f;
             rect.offsetMin = leftBottom;
             rect.offsetMax = rightTop;
 

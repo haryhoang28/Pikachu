@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
-using UnityEngine.EventSystems;
 
 public enum GameState { MainMenu, GamePlay, Setting, Finish, Revive, Shuffling }
 public class GameManager : Singleton<GameManager>
@@ -24,6 +21,9 @@ public class GameManager : Singleton<GameManager>
 
     public int GetCurrentHintCount => _match2 != null ? _match2.CurrentHintCount : 0;
     public int GetMaxHintCount => _match2 != null ? _match2.MaxHintPerGame : 0;
+    
+    public int GetCurrentShuffleCount => _match2 != null ? _match2.CurrentShuffleCount : 0;
+    public int GetMaxShuffleCount => _match2 != null ? _match2.MaxShufflePerGame : 0;
     
     public void ClearGame() => _match2.ClearGame();
     
@@ -48,9 +48,6 @@ public class GameManager : Singleton<GameManager>
         {
             Screen.SetResolution(Mathf.RoundToInt(ratio * (float)maxScreenHeight), maxScreenHeight, true);
         }
-
-        
-        
     }
 
     private void Start()
@@ -58,8 +55,6 @@ public class GameManager : Singleton<GameManager>
         _uiManager = UIManager.Instance;
         if (_uiManager == null)
         {
-            Debug.LogError("[GameManager] UIManager Instance not found in Start! This should not happen if UIManager is also a Singleton.");
-            // Cân nhắc xử lý lỗi ở đây nếu không tìm thấy UIManager.Instance
             return;
         }
         _uiManager.OpenUI<CanvasMainMenu>();
@@ -81,7 +76,7 @@ public class GameManager : Singleton<GameManager>
                 _uiManager.GetUI<CanvasGamePlay>().UpdateTimeBar(_currentTime, _gameDuration);
             }
 
-            // Check if it was ran out of time
+            // Check if it was run out of time
             if (_currentTime <= 0f)
             {
                 EndGame(false); // Game Over due to time = 0
@@ -109,10 +104,8 @@ public class GameManager : Singleton<GameManager>
             canvasGamePlay.UpdateTimeBar(_currentTime, _gameDuration);
             canvasGamePlay.UpdateScore(_currentScore);
         }
-
         _match2.InitializeGame();
         ChangeState(GameState.GamePlay);
-
     }
     
 
@@ -146,14 +139,7 @@ public class GameManager : Singleton<GameManager>
             Vector3 worldPoint = Camera.main.ScreenToWorldPoint(clickedPosition);
             worldPoint.z = 0;
             RaycastHit2D hit = Physics2D.Raycast(worldPoint, Vector3.zero);
-            if (hit.collider != null)
-            {
-                OnGameObjectClicked?.Invoke(hit.collider.gameObject);
-            }
-            else
-            {
-                OnGameObjectClicked?.Invoke(null);
-            }
+            OnGameObjectClicked?.Invoke(hit.collider != null ? hit.collider.gameObject : null);
         }
     }
     public void EndGame(bool levelComplete)
@@ -172,8 +158,12 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void OnClicked()
+    public void OnHintButtonClicked()
     {
         _match2.OnHintButtonClicked();
+    }
+    public void OnShuffleButtonClicked()
+    {
+        _match2.OnShuffleButtonClicked();
     }
 }

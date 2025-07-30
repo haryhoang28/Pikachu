@@ -9,4 +9,5 @@ public interface IPokemonSpawner
     void Initialize(PokemonType[] pokemonTypes);
     Pokemon CreatePokemonAt(int x, int y, PokemonType type, Transform parentTransform, IGridManager gridManager);
     void CreateObstacleAt(int x, int y, Transform parentTransform, IGridManager gridManager);
+    void SetPokemonSprite(Pokemon activePokemon, PokemonType type);
 }
