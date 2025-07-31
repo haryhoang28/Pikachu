@@ -79,6 +79,7 @@ public class CanvasGamePlay : UICanvas
 
     public void OnHintButtonClicked()
     {
+        Debug.Log("123");
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnHintButtonClicked();
