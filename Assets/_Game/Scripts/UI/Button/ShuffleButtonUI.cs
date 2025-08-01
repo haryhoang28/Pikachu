@@ -23,19 +23,19 @@ public class ShuffleButtonUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Match2.OnHintCountChanged += UpdateShuffleDisplay;
+        Match2.OnShuffleCountChanged += UpdateShuffleDisplay;
     }
 
     private void OnDisable()
     {
-        Match2.OnHintCountChanged -= UpdateShuffleDisplay;
+        Match2.OnShuffleCountChanged -= UpdateShuffleDisplay;
     }
 
     private void UpdateShuffleDisplay(int currentCount, int maxCount)
     {
         if (_shuffleCountText != null)
         {
-            _shuffleCountText.text = $"Hints: {currentCount}/{maxCount}";
+            _shuffleCountText.text = $"{currentCount}/{maxCount}";
         }
 
         if (_button != null)

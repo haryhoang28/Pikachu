@@ -8,7 +8,6 @@ public class HintButtonUI : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _hintCountText;
     [SerializeField] private Button _button;
-    // [SerializeField] private Match2 _match2;
     private void Awake()
     {
         if (_hintCountText == null)
@@ -35,7 +34,7 @@ public class HintButtonUI : MonoBehaviour
     {
         if (_hintCountText != null)
         {
-            _hintCountText.text = $"Hints: {currentCount}/{maxCount}";
+            _hintCountText.text = $"{currentCount}/{maxCount}";
         }
 
         if (_button != null)

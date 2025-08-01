@@ -29,7 +29,7 @@ public class CanvasGamePlay : UICanvas
 
     public void UpdateHintCount(int currentCount, int maxCount)
     {
-        // Vô hiệu hóa hoặc kích hoạt lại nút gợi ý
+        // Deactivate or reactivate the hint button
         if (_hintButton != null)
         {
             _hintButton.interactable = (currentCount > 0); // Nếu currentCount > 0 thì nút sẽ tương tác được
@@ -79,7 +79,6 @@ public class CanvasGamePlay : UICanvas
 
     public void OnHintButtonClicked()
     {
-        Debug.Log("123");
         if (GameManager.Instance != null)
         {
             GameManager.Instance.OnHintButtonClicked();
@@ -103,6 +102,4 @@ public class CanvasGamePlay : UICanvas
             Debug.LogWarning("[CanvasGamePlay] Match2 instance is null. Cannot shuffle board.");
         }
     }
-
-    
 }

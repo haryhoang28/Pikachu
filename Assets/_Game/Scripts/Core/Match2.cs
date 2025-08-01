@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using UnityEngine;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 
@@ -26,7 +23,7 @@ public class Match2 : MonoBehaviour
     [Header("Hint Booster Settings")] 
     [SerializeField] private float _hintHighlightDuration = 0.5f;
     [SerializeField] private Color _hintColor = Color.green;
-    private int _maxHintPerGame = 3;
+    [SerializeField] private int _maxHintPerGame = 3;
     private int _hintRemaining;
     public static event Action<int, int> OnHintCountChanged;
 
@@ -112,7 +109,7 @@ public class Match2 : MonoBehaviour
         DisableInput();
         _gridManager.ClearAllPokemonsAndObstacles(transform);
     }
-    public void DisableInput() => _inputController.DisableInput();
+    private void DisableInput() => _inputController.DisableInput();
 
     private MapCellType[,] GenerateRandomMapLayout(int innerGridWidth, int innerGridHeight, PokemonType[] availablePokemonTypes)
     {
@@ -165,7 +162,7 @@ public class Match2 : MonoBehaviour
                     else
                     {
                         Debug.LogError($"[Match2] Invalid MapCellType for PokemonType: {pokemonsToPlace[pokemonIndex].typeId}");
-                        layout[x, y] = MapCellType.Empty; // Mặc định là Empty nếu có lỗi
+                        layout[x, y] = MapCellType.Empty; // If cannot parse, set to Empty
                     }
                     pokemonIndex++;
                 }
@@ -178,7 +175,7 @@ public class Match2 : MonoBehaviour
         return layout;
     }
 
-    public void ShuffleBoard()
+    private void ShuffleBoard()
     {
         Debug.Log("[Match2] ShuffleBoard called. Disabling input temporarily.");
         _inputController.DisableInput();
