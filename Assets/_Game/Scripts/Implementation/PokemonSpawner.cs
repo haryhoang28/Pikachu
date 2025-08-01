@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,9 @@ public class PokemonSpawner : IPokemonSpawner
 {
     private Pokemon _pokemonPrefab;
     private GameObject _obstaclePrefab;
+    
+    private readonly float _dropDuration = 0.5f;
+    private readonly float _dropHeight = 3f;
     private Dictionary<MapCellType, PokemonType> _pokemonTypeMap;
     public Dictionary<MapCellType, PokemonType> PokemonTypeMap => _pokemonTypeMap;
 
@@ -37,23 +41,22 @@ public class PokemonSpawner : IPokemonSpawner
 
     public void Initialize(PokemonType[] pokemonTypes)
     {
-        _pokemonTypeMap = new Dictionary<MapCellType, PokemonType>();
-        foreach (var pokemonType in pokemonTypes)
+        foreach (var type in pokemonTypes)
         {
-            if (Enum.TryParse(pokemonType.typeId, out MapCellType cellType))
+            if (Enum.TryParse(type.typeId, out MapCellType mapCellType))
             {
-                if (_pokemonTypeMap.ContainsKey(cellType))
+                if (!_pokemonTypeMap.ContainsKey(mapCellType))
                 {
-                    Debug.LogWarning($"[PokemonSpawner] Duplicate Pokemon ID '{pokemonType.typeId}' found");
+                    _pokemonTypeMap[mapCellType] = type;
                 }
                 else
                 {
-                    _pokemonTypeMap.Add(cellType, pokemonType);
+                    Debug.LogWarning($"Duplicate Pokemon ID '{type.typeId}' found");
                 }
             }
             else
             {
-                Debug.LogWarning($"[PokemonSpawner] PokemonType '{pokemonType.typeName}' has an invalid or unparseable typeId");
+                Debug.LogWarning($"Invalid typeId for '{type.typeName}'");
             }
         }
     }
@@ -64,9 +67,9 @@ public class PokemonSpawner : IPokemonSpawner
         _obstaclePrefab = obstaclePrefab;
     }
     
-    public void SetPokemonSprite(Pokemon activePokemon, PokemonType type)
+    public void SetPokemonSprite(Pokemon pokemon, PokemonType type)
     {
-        if (activePokemon == null)
+        if (pokemon == null)
         {
             Debug.LogError("[PokemonSpawner] Active Pokemon is null.");
             return;
@@ -76,6 +79,32 @@ public class PokemonSpawner : IPokemonSpawner
             Debug.LogError("[PokemonSpawner] PokemonType is null.");
             return;
         }
-        activePokemon.OnInit(type);
+        pokemon.OnInit(type);
+    }
+
+    public void SpawnPokemonWithDrop(Vector3 targetPosition, Transform parent)
+    {
+        Vector3 startPosition = targetPosition + Vector3.up * _dropHeight;
+        UnityEngine.Object.Instantiate(_pokemonPrefab.gameObject,
+            startPosition,
+            Quaternion.identity,
+            parent);
+    }
+
+    private IEnumerator DropPokemonRoutine(Vector3 targetPosition, Transform parent)
+    {
+        Vector3 startPosition = targetPosition + Vector3.up * _dropHeight;
+        Pokemon pokemon = UnityEngine.Object.Instantiate(_pokemonPrefab,
+            startPosition,
+            Quaternion.identity,
+            parent);
+        float elapsedTime = 0f;
+        while (elapsedTime < _dropDuration)
+        {
+            pokemon.transform.position = Vector3.Lerp(startPosition, targetPosition, elapsedTime / _dropDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        pokemon.transform.position = targetPosition;
     }
 }
